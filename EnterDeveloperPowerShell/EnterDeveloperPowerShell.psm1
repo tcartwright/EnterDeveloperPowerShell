@@ -1,6 +1,6 @@
 ﻿<#
 .SYNOPSIS
-This function will enter the Visual Studio Developer Powershell mode, and will return the installation path of the version selected using the $DisplayNameMatch
+This function will enter the Visual Studio Developer Powershell mode of the version selected using the $DisplayNameMatch
 
 .PARAMETER DisplayNameMatch
 A regex that will be matched against the DisplayName of the instance. You can also send in "latest" to just get the latest version. Default: "latest"
@@ -10,25 +10,23 @@ Depends upon VSWHERE.exe. Requires that at the very least Visual Studio 2017 is 
 lower versions as long as VSWHERE.EXE is found.
 
 .EXAMPLE
-PS> $installPath = Invoke-VSDeveloperPowershell -DisplayNameMatch "latest"
-PS> Write-Host "installPath = $installPath"
+PS> Invoke-VSDeveloperPowershell -DisplayNameMatch "latest"
 
 .EXAMPLE
-PS> $installPath = Invoke-VSDeveloperPowershell -DisplayNameMatch "2017"
-PS> Write-Host "installPath = $installPath"
+PS> Invoke-VSDeveloperPowershell # This is the same as passing in latest
 
 .EXAMPLE
-PS> $installPath = Invoke-VSDeveloperPowershell -DisplayNameMatch "2019" -Verbose
-PS> Write-Host "installPath = $installPath"
+PS> Invoke-VSDeveloperPowershell -DisplayNameMatch "2017"
 
 .EXAMPLE
-PS> $installPath = Invoke-VSDeveloperPowershell -DisplayNameMatch "Visual.*2019"
-PS> Write-Host "installPath = $installPath"
+PS> Invoke-VSDeveloperPowershell -DisplayNameMatch "2019" -Verbose
 
-.OUTPUTS
-    System.String. Returns the Visual Studio installation Path.
+.EXAMPLE
+PS> Invoke-VSDeveloperPowershell -DisplayNameMatch "Visual.*2019"
 
 .LINK About vshwere: https://docs.microsoft.com/en-us/visualstudio/install/tools-for-managing-visual-studio-instances?using-vswhereexe
+
+.LINK References: https://github.com/Microsoft/vswhere/wiki/Start-Developer-Command-Prompt
 #>
 function Invoke-VSDeveloperPowershell {
     [CmdletBinding()]
@@ -38,10 +36,6 @@ function Invoke-VSDeveloperPowershell {
         $DisplayNameMatch = "latest"
     )
 
-    # TIM C: I extrapolated how to enter the Developer Shell from the shortcut that installs with VS 2019 called: "Developer PowerShell for VS 2019".
-    # I added the take on VSWHERE so it will work for any version 2017+
-
-    #. "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -?
     process {
         Write-Verbose "Scanning for Visual Studio using: $DisplayNameMatch"
 
@@ -76,67 +70,20 @@ function Invoke-VSDeveloperPowershell {
 
         Write-Verbose "Found VsDevCmd.bat at $vsDevCmdPath"
 
-        $ret = InvokeProcess -logName "VSDevShell" -exe "cmd.exe" -exeArgs "/c ""$vsDevCmdPath"""
-
-        if ($ret -ne 0) {
-            throw "Unable to enter Visual Studio Developer Powershell."
-            exit $ret;
+        if ([string]::IsNullOrWhiteSpace($env:VSCMD_VER)) {
+            & "$env:comspec" /s /c "`"$($instance.installationPath)\Common7\Tools\vsdevcmd.bat`" && set" | foreach-object {
+                if ($_ -match "=") {
+                    $name, $value = $_ -split '=', 2
+                    Write-Verbose "SETTING $name=$value"
+                    Set-Content env:\"$name" $value
+                } else {
+                    $_
+                }
+            }
+        } else {
+            Write-Warning "Visual Studio Developer Command Prompt v$($env:VSCMD_VER) is already installed"
         }
-
-        return $instance.installationPath
     }
-}
-
-function InvokeProcess (){
-	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '')] #Needed for the process events
-	param(
-        [System.String]$logName,
-        [System.String]$exe,
-        [System.String]$exeArgs
-    )
-
-	process {
-		Write-Verbose "Running: $exe args: $exeArgs"
-
-		$global:LogFormatName = $logName
-		$global:logDateFormat = "MM-dd-yyyy HH:mm:ss.fff"
-		$processInfo = New-Object System.Diagnostics.ProcessStartInfo
-		$processInfo.FileName = $exe
-		$processInfo.RedirectStandardError = $true
-		$processInfo.RedirectStandardOutput = $true
-		$processInfo.UseShellExecute = $false
-		$processInfo.CreateNoWindow = $true
-		$processInfo.Arguments = $exeArgs
-		$process = New-Object System.Diagnostics.Process
-		$process.StartInfo = $processInfo
-
-		# Register Object Events for stdin\stdout reading
-		$OutEvent = Register-ObjectEvent -Action {
-			$data = $Event.SourceEventArgs.Data
-			if ($data) {
-				Write-Output "$global:LogFormatName[$(get-date -Format "$global:logDateFormat")]: $($data)"
-			}
-		} -InputObject $process -EventName OutputDataReceived
-
-		$ErrEvent = Register-ObjectEvent -Action {
-			$data = $Event.SourceEventArgs.Data
-			if ($data) {
-				Write-Warning "$global:LogFormatName[$(get-date -Format "$global:logDateFormat")]: $($data)"
-			}
-		} -InputObject $process -EventName ErrorDataReceived
-
-		$process.Start() | Out-Null
-		# Begin reading stdin\stdout
-		$process.BeginOutputReadLine()
-		$process.BeginErrorReadLine()
-		$process.WaitForExit()
-
-		$ret = $process.ExitCode
-		# Unregister events
-		$OutEvent.Name, $ErrEvent.Name | ForEach-Object { Unregister-Event -SourceIdentifier $_ }
-
-		return $ret
-	}
 }
 
 
