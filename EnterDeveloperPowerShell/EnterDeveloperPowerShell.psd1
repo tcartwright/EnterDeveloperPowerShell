@@ -113,7 +113,11 @@ PrivateData = @{
         ReleaseNotes = @'
 1.0.0 20210815
 * Initial  release to PS Gallery		
-		
+1.0.2 20210815
+* Fixed isse where RootModule was commented
+* Attempted to edit description
+1.0.3 20210815
+* Shorted description, and removed readme 		
 '@
 
     } # End of PSData hashtable
