@@ -8,18 +8,21 @@ Depends upon VSWHERE.exe. Requires that at the very least Visual Studio 2017 is 
 
 Gets the latest Visual Studio Installed and enters the developer mode for that version
 ```powershell
+PS> Import-Module EnterDeveloperPowerShell
 PS> $installPath = Invoke-VSDeveloperPowershell -DisplayNameMatch "latest"
 PS> Write-Host "installPath = $installPath"
 ```
 
 Gets the Visual Studio 2017 IF Installed and enters the developer mode for that version. IF not installed, an exception will be thrown
 ```powershell
+PS> Import-Module EnterDeveloperPowerShell
 PS> $installPath = Invoke-VSDeveloperPowershell -DisplayNameMatch "latest"
 PS> Write-Host "installPath = $installPath"
 ```
 
 Shows an example getting the path using regex
 ```powershell
+PS> Import-Module EnterDeveloperPowerShell
 PS> $installPath = Invoke-VSDeveloperPowershell -DisplayNameMatch "Visual.*2019"
 PS> Write-Host "installPath = $installPath"
 ```
