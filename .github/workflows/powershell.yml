@@ -47,12 +47,12 @@ jobs:
           exit 1
         }
     
-    # - name: Publish Module to PowerShell Gallery
-      # uses: pcgeek86/publish-powershell-module-action@v19
-      # id: publish-module
-      # with:
-        # modulePath: EnterDeveloperPowerShell
-        # NuGetApiKey: ${{ secrets.POWERSHELL_GALLERY_APIKEY }}
+    - name: Publish Module to PowerShell Gallery
+      uses: pcgeek86/publish-powershell-module-action@v19
+      id: publish-module
+      with:
+        modulePath: EnterDeveloperPowerShell
+        NuGetApiKey: ${{ secrets.POWERSHELL_GALLERY_APIKEY }}
 
     - name: Commit changes  
       run: |
