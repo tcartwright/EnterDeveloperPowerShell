@@ -23,7 +23,7 @@ jobs:
       shell: powershell
       run: |
         Import-Module PSScriptAnalyzer
-        Invoke-ScriptAnalyzer -Path "${{ github.workspace }}\EnterDeveloperPowerShell\EnterDeveloperPowerShell\EnterDeveloperPowerShell.psm1"
+        Invoke-ScriptAnalyzer -Path "${{ github.workspace }}\EnterDeveloperPowerShell\EnterDeveloperPowerShell.psm1"
     
     - name: Validate Module
       shell: powershell
