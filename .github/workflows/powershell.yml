@@ -47,7 +47,7 @@ jobs:
         }
     
     - name: Publish Module to PowerShell Gallery
-      shell: powershell
+      shell: pwsh
       env:
         PSGALLERY_APIKEY: "${{ secrets.POWERSHELL_GALLERY_APIKEY }}"
       run: |
