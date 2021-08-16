@@ -29,15 +29,9 @@ jobs:
       run: |
         $fileName = "${{ github.workspace }}\EnterDeveloperPowerShell\EnterDeveloperPowerShell.psd1"
         $inputsVersion = "${{ github.event.inputs.ModuleVersion }}"
-        [Version]$newVersion, $newVersionSuffix = $inputsVersion -split "-", 2
         $manifestContents =  Get-Content $fileName -raw
         $options = [System.Text.RegularExpressions.RegexOptions]::IgnoreCase -bor [System.Text.RegularExpressions.RegexOptions]::Multiline
         $matches = [Regex]::Matches($manifestContents, '(ModuleVersion\s*=\s*'')(.*?)(''.*$)', $options)
-        [Version]$oldVersion, $oldVersionSuffix = $matches.Groups[2].Value -split "=", 2
-        if ($oldVersion -lt $newVersion) {
-            throw "You cannot publish an older module version to the gallery."
-            exit 1
-        }         
         $manifestContents = [Regex]::Replace($manifestContents, '(ModuleVersion\s*=\s*'')(.*?)(''.*$)', "`${1}$inputsVersion`${3}", $options)
         [System.IO.File]::WriteAllText($fileName, $manifestContents)
     
