@@ -58,6 +58,7 @@ jobs:
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
+        git add .
         git diff-index --quiet HEAD || git commit -m "Updating changes made by build"   
     
     - name: Push changes  
