@@ -27,7 +27,7 @@ jobs:
     
     - name: Validate Module
       shell: powershell
-      run: Publish-Module -Path "${{ github.workspace }}\EnterDeveloperPowerShell\" -NuGetApiKey "${{ secrets.POWERSHELL_GALLERY_APIKEY }}" -WhatIf -Verbose
+      run: Publish-Module -Path "${{ github.workspace }}\EnterDeveloperPowerShell\" -NuGetApiKey ${{ secrets.POWERSHELL_GALLERY_APIKEY }} -WhatIf -Verbose
 
 #    - name: Publish Module
 #      shell: powershell
