@@ -1,4 +1,4 @@
-# EnterDeveloperPowerShell Description
+# PowerShell "Visual Studio Developer Command Prompt"
 This function will enter the "Visual Studio Developer Command Prompt" mode for the Visual Studio version matching the $DisplayNameMatch. 
 
 ### NOTES
