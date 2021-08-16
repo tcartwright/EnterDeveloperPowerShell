@@ -11,31 +11,31 @@ This function will enter the "Visual Studio Developer Command Prompt" mode for t
 Gets the latest Visual Studio Installed and enters the developer mode for that version
 ```powershell
 PS> Import-Module EnterDeveloperPowerShell
-PS> Invoke-VSDeveloperPowershell # This is the same as passing in latest
+PS> Enter-VisualStudioDeveloperShell # This is the same as passing in latest
 ```
 
 Gets the latest Visual Studio version installed, and enters the developer command prompt for that version
 ```powershell
 PS> Import-Module EnterDeveloperPowerShell
-PS> Invoke-VSDeveloperPowershell -DisplayNameMatch "latest"
+PS> Enter-VisualStudioDeveloperShell -DisplayNameMatch "latest"
 ```
 
 Gets the Visual Studio 2015 **if** Installed and enters the developer mode for that version. If not installed, an exception will be thrown
 ```powershell
 PS> Import-Module EnterDeveloperPowerShell
-PS> Invoke-VSDeveloperPowershell -DisplayNameMatch "2015"
+PS> Enter-VisualStudioDeveloperShell -DisplayNameMatch "2015"
 ```
 
 Shows an example getting the path using just version
 ```powershell
 PS> Import-Module EnterDeveloperPowerShell
-PS> Invoke-VSDeveloperPowershell -DisplayNameMatch "2019"
+PS> Enter-VisualStudioDeveloperShell -DisplayNameMatch "2019"
 ```
 
 Shows an example that could return multiple instaled versions, when this happens the newest version is selected.
 ```powershell
 PS> Import-Module EnterDeveloperPowerShell
-PS> Invoke-VSDeveloperPowershell -DisplayNameMatch "2015|2017|2019"
+PS> Enter-VisualStudioDeveloperShell -DisplayNameMatch "2015|2017|2019"
 ```
 
 ### Possible Exceptions

@@ -10,25 +10,25 @@ Depends upon VSWHERE.exe. Requires that at the very least Visual Studio 2017 is 
 lower versions as long as VSWHERE.EXE is found.
 
 .EXAMPLE
-PS> Invoke-VSDeveloperPowershell -DisplayNameMatch "latest"
+PS> Enter-VisualStudioDeveloperShell -DisplayNameMatch "latest"
 
 .EXAMPLE
-PS> Invoke-VSDeveloperPowershell # This is the same as passing in latest
+PS> Enter-VisualStudioDeveloperShell # This is the same as passing in latest
 
 .EXAMPLE
-PS> Invoke-VSDeveloperPowershell -DisplayNameMatch "2017"
+PS> Enter-VisualStudioDeveloperShell -DisplayNameMatch "2017"
 
 .EXAMPLE
-PS> Invoke-VSDeveloperPowershell -DisplayNameMatch "2019" -Verbose
+PS> Enter-VisualStudioDeveloperShell -DisplayNameMatch "2019" -Verbose
 
 .EXAMPLE
-PS> Invoke-VSDeveloperPowershell -DisplayNameMatch "Visual.*2019"
+PS> Enter-VisualStudioDeveloperShell -DisplayNameMatch "Visual.*2019"
 
 .LINK About vshwere: https://docs.microsoft.com/en-us/visualstudio/install/tools-for-managing-visual-studio-instances?using-vswhereexe
 
 .LINK References: https://github.com/Microsoft/vswhere/wiki/Start-Developer-Command-Prompt
 #>
-function Invoke-VSDeveloperPowershell {
+function Enter-VisualStudioDeveloperShell {
     [CmdletBinding()]
     param (
         [Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
