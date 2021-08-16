@@ -49,17 +49,17 @@ function Invoke-VSDeveloperPowershell {
         if ($DisplayNameMatch -ieq "latest") {
             $instance = (. $vsWhere -latest -format json | ConvertFrom-Json) | Select-Object -First 1
         } else {
+            # if there are multiples returned, try to sort them with the newest at the top and select it
             $instance = (. $vsWhere -format json | ConvertFrom-Json) `
-                | Where-Object { $_.displayName -imatch $DisplayNameMatch }
+                | Where-Object { $_.displayName -imatch $DisplayNameMatch } `
+                | Sort-Object -Descending -Property installationVersion `
+                | Select-Object -First 1
         }
 
         if (!($instance)) {
             throw "An instance of Visual Studio could not be found using: $DisplayNameMatch"
             exit -2
-        } elseif ($instance.GetType().Name -ieq "Object[]" -and $instance.Count -gt 1) {
-            throw "Too many instances of Visual Studio were found using: $DisplayNameMatch, please alter your regex so that it is more selective."
-            exit -3
-        }
+        } 
 
         $vsDevCmdPath = [System.IO.Path]::Combine($instance.installationPath, "Common7\Tools\VsDevCmd.bat")
 
@@ -85,5 +85,3 @@ function Invoke-VSDeveloperPowershell {
         }
     }
 }
-
-

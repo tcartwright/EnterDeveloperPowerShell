@@ -1,5 +1,5 @@
 # EnterDeveloperPowerShell Description
-This function will enter the Visual Studio Developer Powershell mode matching the version selected using the $DisplayNameMatch. Allows any powershell instance to enter "Visual Studio Developer Mode". If run multiple times, a warning will be written out. 
+This function will enter the Visual Studio Developer Powershell mode matching the version selected using the $DisplayNameMatch. Allows any powershell instance to enter "Visual Studio Developer Command Prompt" mode. If run multiple times, a warning will be written out. If multiple instances are found matching, then the latest version will be returned.
 
 ### NOTES
 Depends upon VSWHERE.exe. Requires that at the very least Visual Studio 2017 is installed or greater. Can be used to enter the developer powershell for lower versions as long as VSWHERE.EXE is found. [About vshere.exe](https://docs.microsoft.com/en-us/visualstudio/install/tools-for-managing-visual-studio-instances?using-vswhereexe)
@@ -30,10 +30,15 @@ PS> Import-Module EnterDeveloperPowerShell
 PS> Invoke-VSDeveloperPowershell -DisplayNameMatch "2019"
 ```
 
+Shows an example that could return multiple instaled versions, when this happens the newest version is selected.
+```powershell
+PS> Import-Module EnterDeveloperPowerShell
+PS> Invoke-VSDeveloperPowershell -DisplayNameMatch "2015|2017|2019"
+```
+
 ### Possible Exceptions
 - VSWHERE.exe is not found
 - No instances are found for the $DisplayNameMatch supplied
-- Multiple instances are found for the $DisplayNameMatch supplied
 - VsDevCmd.bat could not be found in the install
 - The invocation of VsDevCmd.bat fails
 
