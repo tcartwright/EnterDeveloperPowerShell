@@ -59,7 +59,7 @@ function Enter-VisualStudioDeveloperShell {
         if (!($instance)) {
             throw "An instance of Visual Studio could not be found using: $DisplayNameMatch"
             exit -2
-        } 
+        }
 
         $vsDevCmdPath = [System.IO.Path]::Combine($instance.installationPath, "Common7\Tools\VsDevCmd.bat")
 
