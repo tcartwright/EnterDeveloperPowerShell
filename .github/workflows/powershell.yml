@@ -1,0 +1,36 @@
+
+name: Powershell Analyze and Publish 
+
+on:
+  workflow_dispatch:
+      inputs:
+        ModuleVersion:
+          description: 'Module Version'     
+          required: true
+          default: ''
+jobs:
+  build:
+    runs-on: windows-latest  # For a list of available runner types, refer to
+                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    
+    - name: Run PSScriptAnalyzer
+      shell: powershell
+      run: |
+        Import-Module PSScriptAnalyzer
+        Invoke-ScriptAnalyzer -Path "${{ github.workspace }}\EnterDeveloperPowerShell\EnterDeveloperPowerShell\EnterDeveloperPowerShell.psm1"
+    
+    - name: Validate Module
+      shell: powershell
+      run: Publish-Module -Path "${{ github.workspace }}\EnterDeveloperPowerShell\EnterDeveloperPowerShell\" -NuGetApiKey "${{ secrets.POWERSHELL_GALLERY_APIKEY }}" -WhatIf -Verbose
+
+#    - name: Publish Module
+#      shell: powershell
+#      run: Publish-Module -Path "${{ github.workspace }}\EnterDeveloperPowerShell\EnterDeveloperPowerShell\" -NuGetApiKey "${{ secrets.POWERSHELL_GALLERY_APIKEY }}" -WhatIf -Verbose
+
+
