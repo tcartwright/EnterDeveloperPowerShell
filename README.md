@@ -8,34 +8,44 @@ This function will enter the "Visual Studio Developer Command Prompt" mode for t
 
 ### Examples: 
 
+Installs the latest version of the module from the Powershell Gallery
+```powershell
+Install-Module -Name EnterDeveloperPowerShell -Force
+```
+
 Gets the latest Visual Studio Installed and enters the developer mode for that version
 ```powershell
-PS> Import-Module EnterDeveloperPowerShell
-PS> Enter-VisualStudioDeveloperShell # This is the same as passing in latest
+Import-Module EnterDeveloperPowerShell
+Enter-VisualStudioDeveloperShell # This is the same as passing in latest
+dir env:
 ```
 
 Gets the latest Visual Studio version installed, and enters the developer command prompt for that version
 ```powershell
-PS> Import-Module EnterDeveloperPowerShell
-PS> Enter-VisualStudioDeveloperShell -DisplayNameMatch "latest"
+Import-Module EnterDeveloperPowerShell
+Enter-VisualStudioDeveloperShell -DisplayNameMatch "latest"
+dir env:
 ```
 
 Gets the Visual Studio 2015 **if** Installed and enters the developer mode for that version. If not installed, an exception will be thrown
 ```powershell
-PS> Import-Module EnterDeveloperPowerShell
-PS> Enter-VisualStudioDeveloperShell -DisplayNameMatch "2015"
+Import-Module EnterDeveloperPowerShell
+Enter-VisualStudioDeveloperShell -DisplayNameMatch "2015"
+dir env:
 ```
 
 Shows an example getting the path using just version
 ```powershell
-PS> Import-Module EnterDeveloperPowerShell
-PS> Enter-VisualStudioDeveloperShell -DisplayNameMatch "2019"
+Import-Module EnterDeveloperPowerShell
+Enter-VisualStudioDeveloperShell -DisplayNameMatch "2019"
+dir env:
 ```
 
 Shows an example that could return multiple instaled versions, when this happens the newest version is selected.
 ```powershell
-PS> Import-Module EnterDeveloperPowerShell
-PS> Enter-VisualStudioDeveloperShell -DisplayNameMatch "2015|2017|2019"
+Import-Module EnterDeveloperPowerShell
+Enter-VisualStudioDeveloperShell -DisplayNameMatch "2015|2017|2019"
+dir env:
 ```
 
 ### Possible Exceptions
