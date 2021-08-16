@@ -48,9 +48,9 @@ jobs:
     
     - name: Publish Module to PowerShell Gallery
       shell: powershell
-      run: Publish-Module -Path "${{ github.workspace }}/EnterDeveloperPowerShell/" -NuGetApiKey "$env:PSGALLERY_APIKEY" -Verbose
       env:
         PSGALLERY_APIKEY: ${{ secrets.POWERSHELL_GALLERY_APIKEY }}
+      run: Publish-Module -Path "${{ github.workspace }}/EnterDeveloperPowerShell/" -NuGetApiKey "$env:PSGALLERY_APIKEY" -Verbose
       
     - name: Commit changes  
       run: |
