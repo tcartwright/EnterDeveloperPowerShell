@@ -14,6 +14,12 @@ jobs:
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
     steps:
+    - name: Validate Version Input
+      shell: powershell
+      run: |
+        $version, $suffix = "${{ github.event.inputs.ModuleVersion }}" -split "-", 2
+        [Version]$version
+
     - name: Checkout
       uses: actions/checkout@v2
       with:
@@ -25,12 +31,11 @@ jobs:
         Import-Module PSScriptAnalyzer
         Invoke-ScriptAnalyzer -Path "${{ github.workspace }}\EnterDeveloperPowerShell\EnterDeveloperPowerShell.psm1"
     
-    - name: Validate Module
-      shell: powershell
-      run: Publish-Module -Path "${{ github.workspace }}\EnterDeveloperPowerShell\" -NuGetApiKey ${{ secrets.POWERSHELL_GALLERY_APIKEY }} -WhatIf -Verbose
-
-#    - name: Publish Module
-#      shell: powershell
-#      run: Publish-Module -Path "${{ github.workspace }}\EnterDeveloperPowerShell\" -NuGetApiKey "${{ secrets.POWERSHELL_GALLERY_APIKEY }}" -WhatIf -Verbose
+#    - name: Publish Module to PowerShell Gallery
+#      uses: pcgeek86/publish-powershell-module-action@v19
+#      id: publish-module
+#      with:
+#        modulePath: EnterDeveloperPowerShell
+#        NuGetApiKey: ${{ secrets.POWERSHELL_GALLERY_APIKEY }}
 
 
