@@ -9,11 +9,11 @@ on:
           default: ''
 jobs:
   build:
-    runs-on: ubuntu-latest  
+    runs-on: windows-latest  
 
     steps:
     - name: Validate Version Input
-      shell: pwsh
+      shell: powershell
       run: |
         $version, $suffix = "${{ github.event.inputs.ModuleVersion }}" -split "-", 2
         [Version]$version
@@ -24,7 +24,7 @@ jobs:
         fetch-depth: 0
 
     - name: Update Version in PSD1
-      shell: pwsh
+      shell: powershell
       run: |
         $fileName = "${{ github.workspace }}/EnterDeveloperPowerShell/EnterDeveloperPowerShell.psd1"
         $inputsVersion = "${{ github.event.inputs.ModuleVersion }}"
@@ -35,7 +35,7 @@ jobs:
         [System.IO.File]::WriteAllText($fileName, $manifestContents)
     
     - name: Run PSScriptAnalyzer
-      shell: pwsh
+      shell: powershell
       run: |
         Import-Module PSScriptAnalyzer
         $results = Invoke-ScriptAnalyzer -path "${{ github.workspace }}" -Recurse -Fix 
@@ -47,11 +47,8 @@ jobs:
         }
     
     - name: Publish Module to PowerShell Gallery
-      uses: pcgeek86/publish-powershell-module-action@v19
-      id: publish-module
-      with:
-        modulePath: EnterDeveloperPowerShell
-        NuGetApiKey: ${{ secrets.POWERSHELL_GALLERY_APIKEY }}
+      shell: powershell
+      run: Publish-Module -Path "${{ github.workspace }}/EnterDeveloperPowerShell/" -NuGetApiKey "${{ secrets.POWERSHELL_GALLERY_APIKEY }}" -Verbose
 
     - name: Commit changes  
       run: |
