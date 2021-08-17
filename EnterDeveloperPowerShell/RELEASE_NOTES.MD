@@ -1,24 +1,24 @@
 
 1.0.0
-- Initial  release to PS Gallery
+* Initial  release to PS Gallery
 1.0.2
-- Fixed isse where RootModule was commented
-- Attempted to edit description
+* Fixed isse where RootModule was commented
+* Attempted to edit description
 1.0.3
-- Shorted description, and removed readme
+* Shorted description, and removed readme
 1.0.5
-- final working version
+* final working version
 1.0.6
-- Updated script to return newest Version when multiples are found.
+* Updated script to return newest Version when multiples are found.
 1.0.7
-- Updated LicenseUri and ProjectUri in manifest.
+* Updated LicenseUri and ProjectUri in manifest.
 1.0.8
-- Updated manifest Description and site readme with slight wording change.
+* Updated manifest Description and site readme with slight wording change.
 1.0.9
-- More manifest and readme changes.
-- Updated Tags
+* More manifest and readme changes.
+* Updated Tags
 1.0.10
-- Renamed function name to be clearer.
-- Updated Tags
+* Renamed function name to be clearer.
+* Updated Tags
 1.0.11
-- Testing of git action pipeline publish.
+* Testing of git action pipeline publish.
