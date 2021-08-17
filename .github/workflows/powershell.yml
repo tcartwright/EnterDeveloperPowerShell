@@ -28,11 +28,13 @@ jobs:
     - name: Update Version in PSD1
       shell: powershell
       run: |
+        #pull the contents of the release notes so we can verify the release notes have been updated with the new release version and update the manifest with them
         $releaseNotes = Get-Content "${{ github.workspace }}\EnterDeveloperPowerShell\RELEASE_NOTES" -raw
+        #the manifest filename we will pull the contents from and make modifications to 
         $fileName = "${{ github.workspace }}\EnterDeveloperPowerShell\EnterDeveloperPowerShell.psd1"
         $inputsVersion = "${{ github.event.inputs.ModuleVersion }}"
         if ($releaseNotes -notmatch $inputsVersion) {
-            throw "You must add release notes for the version ($inputsVersion) being pushed. Add the release notes to here: EnterDeveloperPowerShell\RELEASE_NOTES.MD"
+            throw "You must add release notes for the version ($inputsVersion) being pushed. Add the release notes to here: https://github.com/tcartwright/EnterDeveloperPowerShell/blob/main/EnterDeveloperPowerShell/RELEASE_NOTES"
             exit 1
         }
         $manifestContents =  Get-Content $fileName -raw
@@ -42,7 +44,7 @@ jobs:
         Write-Output "Changing version from $($matches.Groups[2].Value) to $inputsVersion for '$fileName'"
         #update the version the contents of the $manifestContents with the new version
         $manifestContents = [Regex]::Replace($manifestContents, '(ModuleVersion\s*=\s*'')(.*?)(''.*$)', "`${1}$inputsVersion`${3}", $options)
-        $manifestContents = $manifestContents.Replace("!!release_notes!!", $releaseNotes)
+        $manifestContents = [Regex]::Replace($manifestContents, '(^.*?ReleaseNotes\s*=\s*@'')[\w\W]*?(''@.*$)', "`${1}$releaseNotes`${2}", $options)
         Write-Output "manifestContents = $manifestContents"
         #write the updated? $manifestContents back out into the psd1 file
         [System.IO.File]::WriteAllText($fileName, $manifestContents)
@@ -65,6 +67,7 @@ jobs:
     - name: Publish Module to PowerShell Gallery
       shell: powershell
       env:
+        #this needs to be a repository secret
         PSGALLERY_APIKEY: "${{ secrets.POWERSHELL_GALLERY_APIKEY }}"
       run: |
         Publish-Module -Path "${{ github.workspace }}\EnterDeveloperPowerShell\" -NuGetApiKey "$env:PSGALLERY_APIKEY" -Verbose
