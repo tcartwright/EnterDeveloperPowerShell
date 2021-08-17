@@ -28,7 +28,7 @@ jobs:
     - name: Update Version in PSD1
       shell: powershell
       run: |
-        $releaseNotes = Get-Content "${{ github.workspace }}\EnterDeveloperPowerShell\RELEASE_NOTES.MD" -raw
+        $releaseNotes = Get-Content "${{ github.workspace }}\EnterDeveloperPowerShell\RELEASE_NOTES" -raw
         $fileName = "${{ github.workspace }}\EnterDeveloperPowerShell\EnterDeveloperPowerShell.psd1"
         $inputsVersion = "${{ github.event.inputs.ModuleVersion }}"
         if ($releaseNotes -notmatch $inputsVersion) {
