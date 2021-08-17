@@ -44,7 +44,7 @@ jobs:
         Write-Output "Changing version from $($matches.Groups[2].Value) to $inputsVersion for '$fileName'"
         #update the version the contents of the $manifestContents with the new version
         $manifestContents = [Regex]::Replace($manifestContents, '(ModuleVersion\s*=\s*'')(.*?)(''.*$)', "`${1}$inputsVersion`${3}", $options)
-        $manifestContents = [Regex]::Replace($manifestContents, '(^.*?ReleaseNotes\s*=\s*@'')[\w\W]*?(''@.*$)', "`${1}\r\n$releaseNotes\r\n`${2}", $options)
+        $manifestContents = [Regex]::Replace($manifestContents, '(^.*?ReleaseNotes\s*=\s*@'')[\w\W]*?(''@.*$)', "`${1}`r`n$releaseNotes`r`n`${2}", $options)
         Write-Output "manifestContents = $manifestContents"
         #write the updated? $manifestContents back out into the psd1 file
         [System.IO.File]::WriteAllText($fileName, $manifestContents)
