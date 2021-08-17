@@ -40,7 +40,7 @@ jobs:
         $manifestContents =  Get-Content $fileName -raw
         $regexoptions = [System.Text.RegularExpressions.RegexOptions]::IgnoreCase -bor [System.Text.RegularExpressions.RegexOptions]::Multiline
         #extract the existing version out of the psd1, into seperate parts
-        $matches = [Regex]::Matches($manifestContents, '(ModuleVersion\s*=\s*'')(.*?)(''.*$)', $options)
+        $matches = [Regex]::Matches($manifestContents, '(ModuleVersion\s*=\s*'')(.*?)(''.*$)', $regexoptions)
         Write-Output "Changing version from $($matches.Groups[2].Value) to $inputsVersion for '$fileName'"
         #update the version the contents of the $manifestContents with the new version
         $manifestContents = [Regex]::Replace($manifestContents, '(ModuleVersion\s*=\s*'')(.*?)(''.*$)', "`${1}$inputsVersion`${3}", $regexoptions)
