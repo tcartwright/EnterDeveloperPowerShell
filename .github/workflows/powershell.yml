@@ -33,7 +33,7 @@ jobs:
         #the manifest filename we will pull the contents from and make modifications to 
         $fileName = "${{ github.workspace }}\EnterDeveloperPowerShell\EnterDeveloperPowerShell.psd1"
         $inputsVersion = "${{ github.event.inputs.ModuleVersion }}"
-        if ($releaseNotes -notmatch $inputsVersion) {
+        if ($releaseNotes -notmatch ([Regex]::Escape($inputsVersion))) {
             throw "You must add release notes for the version ($inputsVersion) being pushed. Add the release notes to here: https://github.com/tcartwright/EnterDeveloperPowerShell/blob/main/EnterDeveloperPowerShell/RELEASE_NOTES"
             exit 1
         }
