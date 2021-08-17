@@ -38,14 +38,14 @@ jobs:
             exit 1
         }
         $manifestContents =  Get-Content $fileName -raw
-        $options = [System.Text.RegularExpressions.RegexOptions]::IgnoreCase -bor [System.Text.RegularExpressions.RegexOptions]::Multiline
+        $regexoptions = [System.Text.RegularExpressions.RegexOptions]::IgnoreCase -bor [System.Text.RegularExpressions.RegexOptions]::Multiline
         #extract the existing version out of the psd1, into seperate parts
         $matches = [Regex]::Matches($manifestContents, '(ModuleVersion\s*=\s*'')(.*?)(''.*$)', $options)
         Write-Output "Changing version from $($matches.Groups[2].Value) to $inputsVersion for '$fileName'"
         #update the version the contents of the $manifestContents with the new version
-        $manifestContents = [Regex]::Replace($manifestContents, '(ModuleVersion\s*=\s*'')(.*?)(''.*$)', "`${1}$inputsVersion`${3}", $options)
-        $manifestContents = [Regex]::Replace($manifestContents, '(^.*?ReleaseNotes\s*=\s*@'')[\w\W]*?(''@.*$)', "`${1}`r`n$releaseNotes`r`n`${2}", $options)
-        Write-Output "manifestContents = $manifestContents"
+        $manifestContents = [Regex]::Replace($manifestContents, '(ModuleVersion\s*=\s*'')(.*?)(''.*$)', "`${1}$inputsVersion`${3}", $regexoptions)
+        $manifestContents = [Regex]::Replace($manifestContents, '(^.*?ReleaseNotes\s*=\s*@'')[\w\W]*?(''@.*$)', "`${1}`r`n$releaseNotes`r`n`${2}", $regexoptions)
+        Write-Output "Updated ManifestContents = $manifestContents"
         #write the updated? $manifestContents back out into the psd1 file
         [System.IO.File]::WriteAllText($fileName, $manifestContents)
     
