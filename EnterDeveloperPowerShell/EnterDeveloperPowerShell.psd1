@@ -107,29 +107,7 @@ PrivateData = @{
         # IconUri = ''
 
         # ReleaseNotes of this module
-        ReleaseNotes = @'
-1.0.0 20210815
-* Initial  release to PS Gallery
-1.0.2 20210815
-* Fixed isse where RootModule was commented
-* Attempted to edit description
-1.0.3 20210815
-* Shorted description, and removed readme
-1.0.5
-* final working version
-1.0.6
-* Updated script to return newest Version when multiples are found.
-1.0.7
-* Updated LicenseUri and ProjectUri in manifest.
-1.0.8
-* Updated manifest Description and site readme with slight wording change.
-1.0.9
-* More manifest and readme changes.
-* Updated Tags
-1.0.10
-* Renamed function name to be clearer.
-* Updated Tags
-'@
+        ReleaseNotes = @'!!release_notes!!'@
 
     } # End of PSData hashtable
 

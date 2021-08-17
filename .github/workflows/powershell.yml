@@ -2,11 +2,12 @@ name: Powershell Analyze and Publish
 
 on:
   workflow_dispatch:
-      inputs:
-        ModuleVersion:
-          description: 'Module Version'     
-          required: true
-          default: ''
+    inputs:
+      ModuleVersion:
+        description: 'Module Version'     
+        required: true
+        default: ''
+
 jobs:
   build:
     runs-on: windows-latest  
@@ -16,6 +17,7 @@ jobs:
       shell: powershell
       run: |
         $version, $suffix = "${{ github.event.inputs.ModuleVersion }}" -split "-", 2
+        #cast the version they pass in to the version object. It will verify that the version is valid.
         [Version]$version
     
     - name: Checkout
@@ -26,20 +28,34 @@ jobs:
     - name: Update Version in PSD1
       shell: powershell
       run: |
-        $fileName = "${{ github.workspace }}/EnterDeveloperPowerShell/EnterDeveloperPowerShell.psd1"
+        $releaseNotes = Get-Content "${{ github.workspace }}\EnterDeveloperPowerShell\RELEASE_NOTES.MD" -raw
+        $fileName = "${{ github.workspace }}\EnterDeveloperPowerShell\EnterDeveloperPowerShell.psd1"
         $inputsVersion = "${{ github.event.inputs.ModuleVersion }}"
+        if ($releaseNotes -notmatch $inputsVersion) {
+            throw "You must add release notes for the version ($inputsVersion) being pushed. Add the release notes to here: EnterDeveloperPowerShell\RELEASE_NOTES.MD"
+            exit 1
+        }
         $manifestContents =  Get-Content $fileName -raw
         $options = [System.Text.RegularExpressions.RegexOptions]::IgnoreCase -bor [System.Text.RegularExpressions.RegexOptions]::Multiline
+        #extract the existing version out of the psd1, into seperate parts
         $matches = [Regex]::Matches($manifestContents, '(ModuleVersion\s*=\s*'')(.*?)(''.*$)', $options)
+        Write-Output "Changing version from $($matches.Groups[2].Value) to $inputsVersion for '$fileName'"
+        #update the version the contents of the $manifestContents with the new version
         $manifestContents = [Regex]::Replace($manifestContents, '(ModuleVersion\s*=\s*'')(.*?)(''.*$)', "`${1}$inputsVersion`${3}", $options)
+        $manifestContents = $manifestContents.Replace("!!release_notes!!", $releaseNotes)
+        Write-Output "manifestContents = $manifestContents"
+        #write the updated? $manifestContents back out into the psd1 file
         [System.IO.File]::WriteAllText($fileName, $manifestContents)
     
     - name: Run PSScriptAnalyzer
       shell: powershell
       run: |
         Import-Module PSScriptAnalyzer
+        #run the PSScriptAnalyzer and auto fix any issues that can be fixed
         $results = Invoke-ScriptAnalyzer -path "${{ github.workspace }}" -Recurse -Fix 
+        #write out any violations if they exist
         Write-Output $results
+        #search for warnings or errors that cant be auto fixed. if we find any throw an exception and bail. To require them to be fixed.
         $errors = $results | Where-Object { $_.Severity -ieq "Warning" -or $_.Severity -ieq "Error" } 
         if ($errors -and $errors.Count -gt 0) {
           throw "Problems were found in the powershell scripts. Please fix before running this build again."
@@ -47,11 +63,11 @@ jobs:
         }
     
     - name: Publish Module to PowerShell Gallery
-      shell: pwsh
+      shell: powershell
       env:
         PSGALLERY_APIKEY: "${{ secrets.POWERSHELL_GALLERY_APIKEY }}"
       run: |
-        Publish-Module -Path "${{ github.workspace }}/EnterDeveloperPowerShell/" -NuGetApiKey "$env:PSGALLERY_APIKEY" -Verbose
+        Publish-Module -Path "${{ github.workspace }}\EnterDeveloperPowerShell\" -NuGetApiKey "$env:PSGALLERY_APIKEY" -Verbose
       
     - name: Commit changes  
       run: |
@@ -66,4 +82,3 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: ${{ github.HEAD_REF }}
         force: true
-
