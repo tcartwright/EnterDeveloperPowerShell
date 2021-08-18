@@ -53,7 +53,7 @@ $moduleName = "EnterDeveloperPowerShell"
 
 $module = Get-InstalledModule $moduleName
 if (-not $module) {
-    Write-Host "Installing module"
+    Write-Host "Installing module: $moduleName"
     Install-Module -Name $moduleName -Force
 }
 
