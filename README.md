@@ -47,6 +47,20 @@ Import-Module EnterDeveloperPowerShell
 Enter-VisualStudioDeveloperShell -DisplayNameMatch "2015|2017|2019"
 dir env:
 ```
+Shows an example that installs the module if not installed, and enters developer mode with the latest installed Visual Studio.
+```powershell
+$moduleName = "EnterDeveloperPowerShell"
+
+$module = Get-Module $moduleName
+if (!($module)) {
+    Install-Module -Name $moduleName
+}
+
+Import-Module $moduleName
+Enter-VisualStudioDeveloperShell
+
+dir env:
+```
 
 ### Possible Exceptions
 - VSWHERE.exe is not found
