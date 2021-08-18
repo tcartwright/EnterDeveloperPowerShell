@@ -51,9 +51,10 @@ Shows an example that installs the module if not installed, and enters developer
 ```powershell
 $moduleName = "EnterDeveloperPowerShell"
 
-$module = Get-Module $moduleName
-if (!($module)) {
-    Install-Module -Name $moduleName
+$module = Get-InstalledModule $moduleName
+if ($module -eq $null) {
+    Write-Host "Installing module"
+    Install-Module -Name $moduleName -Force
 }
 
 Import-Module $moduleName
