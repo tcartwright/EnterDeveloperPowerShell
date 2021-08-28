@@ -1,28 +1,28 @@
 ﻿<#
 .SYNOPSIS
-This function will enter the Visual Studio Developer Powershell mode of the version selected using the $DisplayNameMatch
+    This function will enter the Visual Studio Developer Powershell mode of the version selected using the $DisplayNameMatch
 
 .PARAMETER DisplayNameMatch
-A regex that will be matched against the DisplayName of the instance. You can also send in "latest" to just get the latest version. Default: "latest"
+    A regex that will be matched against the DisplayName of the instance. You can also send in "latest" to just get the latest version. Default: "latest"
 
 .NOTES
-Depends upon VSWHERE.exe. Requires that at the very least Visual Studio 2017 is installed or greater. Can be used to enter the developer powershell for
-lower versions as long as VSWHERE.EXE is found.
+    Depends upon VSWHERE.exe. Requires that at the very least Visual Studio 2017 is installed or greater. Can be used to enter the developer powershell for
+    lower versions as long as VSWHERE.EXE is found.
 
 .EXAMPLE
-PS> Enter-VisualStudioDeveloperShell -DisplayNameMatch "latest"
+    Enter-VisualStudioDeveloperShell -DisplayNameMatch "latest"
 
 .EXAMPLE
-PS> Enter-VisualStudioDeveloperShell # This is the same as passing in latest
+    Enter-VisualStudioDeveloperShell # This is the same as passing in latest
 
 .EXAMPLE
-PS> Enter-VisualStudioDeveloperShell -DisplayNameMatch "2017"
+    Enter-VisualStudioDeveloperShell -DisplayNameMatch "2017"
 
 .EXAMPLE
-PS> Enter-VisualStudioDeveloperShell -DisplayNameMatch "2019" -Verbose
+    Enter-VisualStudioDeveloperShell -DisplayNameMatch "2019" -Verbose
 
 .EXAMPLE
-PS> Enter-VisualStudioDeveloperShell -DisplayNameMatch "Visual.*2019"
+    Enter-VisualStudioDeveloperShell -DisplayNameMatch "Visual.*2019"
 
 .LINK About vshwere: https://docs.microsoft.com/en-us/visualstudio/install/tools-for-managing-visual-studio-instances?using-vswhereexe
 
