@@ -3,6 +3,7 @@ This function will enter the "Visual Studio Developer Command Prompt" mode for t
 
 ### NOTES
 - Depends upon VSWHERE.exe. Requires that at the very least Visual Studio 2017 is installed or greater. Can be used to enter the developer powershell for lower versions as long as VSWHERE.EXE is found. [About VSWHERE.EXE](https://docs.microsoft.com/en-us/visualstudio/install/tools-for-managing-visual-studio-instances?using-vswhereexe)
+- VSWhere can also be installed from [here](https://github.com/microsoft/vswhere)
 - If run multiple times, a warning will be written out. This warning can be ignored.
 - If multiple instances are found matching, then the latest version will be used.
 
